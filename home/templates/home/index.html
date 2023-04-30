@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>{{title}}</title>
+	<link type="text/css" href="{% static 'css/style.css' %}" rel="stylesheet" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Kaushan+Script|Montserrat:400,700&amp;subset=cyrillic-ext"
+            rel="stylesheet">
+</head>
+
+<body>
+    <div class="intro">
+        <div class="container">
+            <div class="intro__inner">
+                <h1 class="intro__title">ToDoApp</h1>
+                <form action="/addTodoItem/" class="intro__form" method="post"> {% csrf_token %}
+                    <input type="text" name="ToDo" id="toDo">
+                    <input type="submit" id="saveBtn" class="btn active" value="SAVE">
+                </form>
+                <table class="intro__table">
+                    <tr class="header__title">
+                        <th>№</th>
+                        <th>ToDoItem</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                    {% for i in items %}
+                        {% if i.toDoStatus_id == 2 %}
+                        <tr class="done">
+                            <td> {{ forloop.counter}}</td>
+                            <td> {{ i.toDoItem }}</td>
+                            <td> {{ i.toDoStatus }}</td>
+                            <td>
+                                <form action="/doneToDoItem/{{ i.id }}/" class= "form__button"  method="post"> {% csrf_token %}
+                                    <input type="submit" class="btn" style= "color: white; background-color: green;" value="Done">
+                                </form>
+                                <form action="/deleteTodoItem/{{i.id}}/" class= "form__button" method = "post">{% csrf_token %}
+                                    <input type="submit" class="btn" style= "color: white; background-color: green;" value="Delete">
+                                </form>
+                            </td>
+                        </tr>
+                        {% else %}
+                            <tr class="header__title">
+                            <td> {{ forloop.counter}}</td>
+                            <td> {{ i.toDoItem }}</td>
+                            <td> {{ i.toDoStatus }}</td>
+                            <td>
+                                <form action="/doneToDoItem/{{ i.id }}/" class= "form__button" method="post"> {% csrf_token %}
+                                    <input type="submit" class="btn" value="Done">
+                                </form>
+                                <form action="/deleteTodoItem/{{i.id}}/" class= "form__button" method = "post">{% csrf_token %}
+                                    <input type="submit" class="btn" value="Delete">
+                                </form>
+                            </td>
+                        </tr>
+                        {% endif %}
+
+                    {% endfor %}
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+    </div>
+</body>
+
+</html>
